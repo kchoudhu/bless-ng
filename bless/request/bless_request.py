@@ -93,13 +93,13 @@ def validate_ssh_public_key(public_key):
 
 
 class BlessSchema(Schema):
-    bastion_ips = fields.Str(validate=validate_ips, required=True)
+
     bastion_user = fields.Str(required=True)
-    bastion_user_ip = fields.Str(validate=validate_ips, required=True)
-    command = fields.Str(required=True)
+    command = fields.Str(required=False)
     public_key_to_sign = fields.Str(validate=validate_ssh_public_key, required=True)
     remote_usernames = fields.Str(required=True)
-    kmsauth_token = fields.Str(required=False)
+    bastion_ips = fields.Str(validate=validate_ips, required=False)
+    bastion_user_ip = fields.Str(validate=validate_ips, required=False)
 
     @validates_schema(pass_original=True)
     def check_unknown_fields(self, data, original_data):
@@ -134,28 +134,27 @@ class BlessSchema(Schema):
 
 
 class BlessRequest:
-    def __init__(self, bastion_ips, bastion_user, bastion_user_ip, command, public_key_to_sign,
-                 remote_usernames, kmsauth_token=None):
+    def __init__(self, bastion_user, command, public_key_to_sign,
+                 remote_usernames, bastion_ips=None, bastion_user_ip=None):
         """
         A BlessRequest must have the following key value pairs to be valid.
-        :param bastion_ips: The source IPs where the SSH connection will be initiated from.  This is
-        enforced in the issued certificate.
         :param bastion_user: The user on the bastion, who is initiating the SSH request.
-        :param bastion_user_ip: The IP of the user accessing the bastion.
         :param command: Text information about the SSH request of the user.
         :param public_key_to_sign: The id_rsa.pub that will be used in the SSH request.  This is
         enforced in the issued certificate.
         :param remote_usernames: Comma-separated list of username(s) or authorized principals on the remote
         server that will be used in the SSH request.  This is enforced in the issued certificate.
-        :param kmsauth_token: An optional kms auth token to authenticate the user.
+        :param bastion_ips: (optional) the source IPs where the SSH connection will be initiated from.  This is
+        enforced in the issued certificate.
+        :param bastion_user_ip: (optional) IP of the user accessing the bastion.
         """
-        self.bastion_ips = bastion_ips
+        # self.bastion_ips = bastion_ips
         self.bastion_user = bastion_user
+        self.bastion_ips = bastion_ips
         self.bastion_user_ip = bastion_user_ip
         self.command = command
         self.public_key_to_sign = public_key_to_sign
         self.remote_usernames = remote_usernames
-        self.kmsauth_token = kmsauth_token
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
