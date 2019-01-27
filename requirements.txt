@@ -6,9 +6,7 @@ docutils==0.14
 idna==2.7
 ipaddress==1.0.22
 jmespath==0.9.3
-kmsauth==0.3.0
 marshmallow==2.15.3
 pycparser==2.18
 python-dateutil==2.7.3
-s3transfer==0.1.13
 six==1.11.0

@@ -21,7 +21,6 @@ setup(
         'cryptography',
         'ipaddress',
         'marshmallow',
-        'kmsauth'
     ],
     extras_require={
         'tests': [
