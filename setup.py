@@ -18,7 +18,6 @@ setup(
     license=about["__license__"],
     packages=find_packages(exclude=["test*"]),
     install_requires=[
-        'boto3',
         'cryptography',
         'ipaddress',
         'marshmallow',
